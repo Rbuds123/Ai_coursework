@@ -15,21 +15,15 @@ def initialize_population(pop_size, chromosome_length):
     return np.random.choice([0, 1], size=(pop_size, chromosome_length))    
 
 def fitness(chromosome):
-    """
-    Calculate the fitness of a chromosome by comparing it to the target pattern.
+    chromosome_1 = chromosome[:8]
+    chromosome_2 = chromosome[8:24]
+    chromosome_3 = chromosome[24:32]
     
-    Args:
-        chromosome (np.ndarray): The chromosome to evaluate.
+    Part_1 = np.sum(chromosome_1) + np.sum(chromosome_3)
     
-    Returns:
-        int: Fitness score.
-    """
-    target = [1] * 8 + [0] * 16 + [1] * 8
-    # Calculate fitness by summing matches with the target pattern
-    fitness_score = sum(
-        1 for i in range(len(chromosome)) if chromosome[i] == target[i]
-    )
-    return fitness_score
+    part_2 = np.sum(chromosome_2)
+    
+    return Part_1 - part_2
 
 def roulette_wheel_selection(population, fitnesses):
     """
@@ -128,7 +122,7 @@ def genetic_algorithm(pop_size, chromosome_length, mutation_rate, generations):
         tuple: Best solution and the generation it was found.
     """
     population = initialize_population(pop_size, chromosome_length)
-
+    
     best_solution = None
     best_fitness = float('-inf')
     local_best_generation = -1
@@ -142,7 +136,7 @@ def genetic_algorithm(pop_size, chromosome_length, mutation_rate, generations):
             best_fitness = current_best_fitness
             best_solution = current_best_solution
             local_best_generation = generation
-
+            
         print(
             f"Generation {generation}, Best solution: {current_best_solution}, "
             f"Fitness: {current_best_fitness}"
@@ -156,10 +150,11 @@ def genetic_algorithm(pop_size, chromosome_length, mutation_rate, generations):
 best_local_solution, local_best_generation = genetic_algorithm(
     pop_size=100,
     chromosome_length=32,
-    mutation_rate=0.1,
+    mutation_rate=0.01,
     generations=500
 )
 print(
     f"Best solution found: {best_local_solution} at generation {local_best_generation} "
     f"with a fitness of {fitness(best_local_solution)}"
 )
+
