@@ -76,35 +76,6 @@ def single_point_crossover(parent1, parent2):
     ])
     return offspring1, offspring2
 
-#def double_point_crossover(parent_1, parent_2):
-    """
-    Perform double point crossover between two parents.
-    
-    Args:
-        parent_1 (np.ndarray): First parent chromosome.
-        parent_2 (np.ndarray): Second parent chromosome.
-    
-    Returns:
-        tuple: Two offspring chromosomes.
-    """
-    points = sorted(
-        np.random.choice(range(1, len(parent_1)), size=2, replace=False)
-    )
-    point_1, point_2 = points
-
-    offspring1 = np.concatenate([
-        parent_1[:point_1],
-        parent_2[point_1:point_2],
-        parent_1[point_2:]
-    ])
-    offspring2 = np.concatenate([
-        parent_2[:point_1],
-        parent_1[point_1:point_2],
-        parent_2[point_2:]
-    ])
-
-    return offspring1, offspring2
-
 def mutate(chromosome, mutation_rate):
     """
     Mutate a chromosome based on the mutation rate.
