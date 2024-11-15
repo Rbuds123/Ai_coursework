@@ -2,7 +2,6 @@ from random import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-x_width = 20
 
 class Neural_network(object):
     def __init__(self, X=1, HL=[64, 32], Y=1):
@@ -12,11 +11,11 @@ class Neural_network(object):
         
         L = [X] + HL + [Y]
         
-        self.W = [np.random.randn(L[i], L[i + 1]) * np.sqrt(2/L[i]) for i in range(len(L) - 1)]
+        self.W = [np.random.randn(L[i], L[i + 1]) * np.sqrt(2 / L[i]) for i in range(len(L) - 1)]
         self.B = [np.zeros((1, L[i + 1])) for i in range(len(L) - 1)]
         
-        self.Der_W = [np.zeros((L[i], L[i + 1])) for i in range(len(L) - 1)]
-        self.Der_B = [np.zeros((1, L[i + 1])) for i in range(len(L) - 1)]
+        self.Der_W = [np.zeros_like(w) for w in self.W]
+        self.Der_B = [np.zeros_like(b) for b in self.B]
         
         self.out = [np.zeros(L[i]) for i in range(len(L))]
         
@@ -108,7 +107,7 @@ class Neural_network(object):
 
 if __name__ == "__main__":
     np.random.seed(42)
-
+    x_width = 20 
     training_inputs = np.array([[random() * x_width * 2 - x_width] for _ in range(1000)])
     targets = np.array([[3 * x[0] + 0.7 * x[0] ** 2] for x in training_inputs])
     
