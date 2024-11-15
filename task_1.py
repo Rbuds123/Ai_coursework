@@ -77,7 +77,7 @@ class GAApp:
         self.canvas.delete("all")
         for i in range(4):
             for j in range(8):
-                color = "green" if chromosome[i * 8 + j] == 1 else "blue"
+                color = "blue" if chromosome[i * 8 + j] == 1 else "green"
                 self.canvas.create_rectangle(j * 40, i * 40, (j + 1) * 40, (i + 1) * 40, fill=color)
     
     def generate(self):
