@@ -2,6 +2,8 @@ from random import random
 import numpy as np
 import matplotlib.pyplot as plt
 
+x_width = 20
+
 class Neural_network(object):
     def __init__(self, X=1, HL=[64, 32], Y=1):
         self.X = X
@@ -106,7 +108,8 @@ class Neural_network(object):
 
 if __name__ == "__main__":
     np.random.seed(42)
-    training_inputs = np.array([[random() * 8 - 4] for _ in range(1000)])
+
+    training_inputs = np.array([[random() * x_width * 2 - x_width] for _ in range(1000)])
     targets = np.array([[3 * x[0] + 0.7 * x[0] ** 2] for x in training_inputs])
     
     input_mean, input_std = training_inputs.mean(), training_inputs.std()
@@ -116,9 +119,9 @@ if __name__ == "__main__":
     targets = (targets - target_mean) / target_std
     
     nn = Neural_network(1, [64, 32], 1)
-    history = nn.train_nn(training_inputs, targets, epochs=1000, lr=0.001, batch_size=32)
+    history = nn.train_nn(training_inputs, targets, epochs=400, lr=0.001, batch_size=32)
     
-    test_inputs = np.linspace(-4, 4, 200).reshape(-1, 1)
+    test_inputs = np.linspace(x_width * -1, x_width, 200).reshape(-1, 1)
     true_outputs = 3 * test_inputs + 0.7 * (test_inputs ** 2)
     
     test_inputs_std = (test_inputs - input_mean) / input_std
