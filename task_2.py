@@ -3,7 +3,7 @@ import random
 
 # Given weights and values from the table
 weights = [3, 8, 2, 9, 7, 1, 8, 13, 10, 9]  # in tonnes
-profits = [126, 154, 256, 526, 388, 245, 210, 442, 671, 348]  # in thousands of £
+profits = [126000, 154000, 256000, 526000, 388000, 245000, 210000, 442000, 671000, 348000]  
 capacity = 35  # Lorry capacity in tonnes
 num_items = len(profits)
 
@@ -85,7 +85,7 @@ print("\nOptimal Solution Summary:")
 print(f"Total Profit (in thousands of £): {best_profit}")
 print(f"Total Weight (in tonnes): {total_weight}")
 print("\nTable of Results:")
-print("Item Type | Weight (tonnes) | Profit (thousands £) | Selected")
+print("Item Type | Weight (tonnes) | Profit | Selected")
 print("-------------------------------------------------------------")
 for i in range(num_items):
     selected = "Yes" if best_solution[i] == 1 else "No"
