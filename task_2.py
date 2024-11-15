@@ -8,8 +8,8 @@ capacity = 35  # Lorry capacity in tonnes
 num_items = len(profits)
 
 # Define GA parameters
-population_size = 50
-generations = 1000
+population_size = 100
+generations = 100
 crossover_rate = 0.8
 mutation_rate = 0.01
 
@@ -61,6 +61,11 @@ for generation in range(generations):
     current_best = max([fitness(chromosome) for chromosome in population])
     fitness_over_time.append(current_best)
     
+    # Find and display the best chromosome and its fitness in this generation
+    best_chromosome = max(population, key=fitness)
+    print(f"Generation {generation + 1}: Best Fitness = {current_best}")
+    print("Best Chromosome:", best_chromosome)
+
     # Create new population
     new_population = []
     for _ in range(population_size // 2):
@@ -76,7 +81,7 @@ best_profit = fitness(best_solution)
 total_weight = np.sum(best_solution * weights)
 
 # Display final results
-print("Optimal Solution Summary:")
+print("\nOptimal Solution Summary:")
 print(f"Total Profit (in thousands of £): {best_profit}")
 print(f"Total Weight (in tonnes): {total_weight}")
 print("\nTable of Results:")
@@ -85,4 +90,3 @@ print("-------------------------------------------------------------")
 for i in range(num_items):
     selected = "Yes" if best_solution[i] == 1 else "No"
     print(f"{i+1:9} | {weights[i]:15} | {profits[i]:20} | {selected}")
-
