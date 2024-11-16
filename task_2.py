@@ -84,7 +84,7 @@ best_solution = max(population, key=fitness)
 best_profit = fitness(best_solution)
 total_weight = np.sum(best_solution * weights)
 
-def draw_van_with_crates_color_coded():
+def draw_van():
 
     root = tk.Tk()
     root.title("Van Diagram")
@@ -158,4 +158,4 @@ def draw_van_with_crates_color_coded():
 #    print(f"{i+1:9} | {weights[i]:15} | {profits[i]:20} | {selected}")
 
 # Show van diagram
-draw_van_with_crates_color_coded()
+draw_van()
