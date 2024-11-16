@@ -98,7 +98,7 @@ class GAApp:
         self.info_label.config(text=f"Best Fitness: {self.best_fitness}, Generation: {self.generation}")
         self.print_chromosome()
 
-        # Schedule the next generation after 500ms (adjust as needed for speed)
+
         self.root.after(500, self.generate)
     
     def print_chromosome(self):
