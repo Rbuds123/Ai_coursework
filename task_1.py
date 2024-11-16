@@ -81,7 +81,7 @@ class GAApp:
                 self.canvas.create_rectangle(j * 40, i * 40, (j + 1) * 40, (i + 1) * 40, fill=color)
     
     def generate(self):
-        if self.generation >= 100:  # Stop after 100 generations
+        if self.generation >= 100 or self.best_fitness == self.chromosome_length/2:  # Stop after 100 generations
             return
 
         self.generation += 1
