@@ -88,7 +88,7 @@ class diamond_NN {
       console.log(delta);
       // const fixed_Delta = delta
       current_Out = this.out[i];
-      current_Out = 
+      // current_Out = 
     }
   }
 
@@ -114,9 +114,9 @@ class diamond_NN {
     }
   }
 
-  sigmoid(x){
-    y=1/(1+)
-  }
+  // sigmoid(x){
+  //   y=1/(1+)
+  // }
 }
 
 
