@@ -62,4 +62,4 @@ function csv_Parse() {
 
 // generate_population(population_size);
 csv_Parse();
-init(2, [2,2], 2);
+// init(2, [2,2], 2);
