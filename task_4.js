@@ -80,6 +80,12 @@ function dotProduct(v1, v2) {
 //   });
 // }
 
+<<<<<<< HEAD
 // // generate_population(population_size);
 // csv_Parse();
 // diamond_NN();
+=======
+// generate_population(population_size);
+csv_Parse();
+// init(2, [2,2], 2);
+>>>>>>> a598dbf5210f714497f4fa5fcaab865f413f5851
