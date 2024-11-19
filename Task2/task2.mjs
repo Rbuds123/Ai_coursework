@@ -4,7 +4,7 @@ const DATA = {
   capacity: 35,
 }
 
-const PARAMETERS = {
+export const PARAMETERS = {
   populationSize: 100,
   generations: 25,
   crossoverRate: 0.8,
@@ -12,36 +12,9 @@ const PARAMETERS = {
   genomeSize: DATA.weights.length,
 }
 
-const chart = new Chart(
-  document.querySelector('canvas'),
-  {
-    type: 'line',
-    option: {
-      animation: false,
-    },
-    data: {
-      labels: Array.from({length: PARAMETERS.generations}, (_, k) => k),
-      datasets: [
-        {
-          label: 'fitness',
-          data: []
-        }
-      ]
-    }
-  }
-);
-
-/**
- * Random binary array where the chance of being a 1 can be altered.
- * @param {Number} chance 
- * @param {int} size 
- * @returns {int[]}
- */
-const weightedBinaryArray = (chance = 0.50, size = PARAMETERS.genomeSize) => Array.from({ length: size }, () => +(Math.random() <= chance));
-
 class Individual {
-  constructor(genome = weightedBinaryArray()) {
-    this.genome = genome;
+  constructor(genome) {
+    this.genome = genome ?? Array.from({ length: PARAMETERS.genomeSize }, () => +(Math.random() <= .5));
   }
 
   get fitness() {
@@ -79,46 +52,48 @@ class Individual {
   }
 }
 
-let population = Array.from({ length: PARAMETERS.populationSize }, () => {
-  const individual = new Individual();
-  // I've chosen to copy out the fitness for efficiency - `fittest`,
-  // `totalFitness`, and normalising the fitnesses would re-run the
-  // fitness function.
-  return [individual, individual.fitness];
-});
+export function* generations() {
+  let population = Array.from({ length: PARAMETERS.populationSize }, () => {
+    const individual = new Individual();
+    // I've chosen to copy out the fitness for efficiency - `fittest`,
+    // `totalFitness`, and normalising the fitnesses would re-run the
+    // fitness function.
+    return [individual, individual.fitness];
+  });
 
-for (let generation = 0; generation < PARAMETERS.generations; generation++) {
-  // Sort population, least fit first.
-  population.sort((a, b) => a[1] - b[1]);
+  for (let generation = 0; generation < PARAMETERS.generations; generation++) {
+    // Sort population, least fit first.
+    population.sort((a, b) => a[1] - b[1]);
 
-  // Pull out the fittest member.
-  chart.data.datasets.at(0).data.push(population.at(-1).at(1));
-  chart.update();
+    // Pull out the fittest member.
+    yield structuredClone(population.at(-1));
 
-  // Normalise fitnesses
-  const totalFitness = population.reduce((p, [_, f]) => p + f, 0);
-  let previousProbability = 0;
-  for (let i = 0; i < PARAMETERS.populationSize; i++) {
-    previousProbability += population[i][1] / totalFitness;
-    population[i][1] = previousProbability;
+    // Normalise fitnesses
+    const totalFitness = population.reduce((p, [_, f]) => p + f, 0);
+    let previousProbability = 0;
+    for (let i = 0; i < PARAMETERS.populationSize; i++) {
+      previousProbability += population[i][1] / totalFitness;
+      population[i][1] = previousProbability;
+    }
+
+    // Generate next population
+    const nextPopulation = [];
+    while (nextPopulation.length < PARAMETERS.populationSize) {
+      // Pick the two roulette arrows
+      const selectorA = Math.random(), selectorB = Math.random();
+
+      // Find the two individuals who are just above the arrow
+      const [parentA] = population.find(([_, f]) => f > selectorA);
+      const [parentB] = population.find(([_, f]) => f > selectorB);
+
+      // Breed the two individuals
+      const [childA, childB] = parentA.breed(parentB);
+
+      // Add them to the new data structure
+      nextPopulation.push([childA, childA.fitness], [childB, childB.fitness]);
+    }
+
+    population = nextPopulation;
   }
-
-  // Generate next population
-  const nextPopulation = [];
-  while (nextPopulation.length < PARAMETERS.populationSize) {
-    // Pick the two roulette arrows
-    const selectorA = Math.random(), selectorB = Math.random();
-
-    // Find the two individuals who are just above the arrow
-    const [parentA] = population.find(([_, f]) => f > selectorA);
-    const [parentB] = population.find(([_, f]) => f > selectorB);
-
-    // Breed the two individuals
-    const [childA, childB] = parentA.breed(parentB);
-
-    // Add them to the new data structure
-    nextPopulation.push([childA, childA.fitness], [childB, childB.fitness]);
-  }
-
-  population = nextPopulation;
+  return population.at(-1).at(1);
 }
