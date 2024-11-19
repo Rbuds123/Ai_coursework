@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <title>Task 2</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-<script src="task2.mjs" type="module" defer></script>
+<script src="script.mjs" type="module" defer></script>
 <style>
   body {
     display: flex;
@@ -13,10 +12,48 @@
     display: flex;
     flex-flow: row wrap;
   }
+
+  svg.timer {
+    width: 8em;
+
+    circle {
+      fill: none;
+      stroke: grey;
+      stroke-width: 1em;
+
+      transform: rotate(-90deg);
+      transform-origin: center;
+
+      animation: 1s linear 1s infinite reverse fillCircle;
+    }
+
+    circle.finished {
+      animation: none;
+      stroke: greenyellow;
+    }
+  }
+
+  @keyframes fillCircle {
+    5% {
+      stroke-dasharray: 0 283;
+    }
+
+    100% {
+      stroke-dasharray: 283 283;
+    }
+  }
 </style>
 <!-- -->
 <h1>Lorry Loading</h1>
 <sub>4Core Logistics Ltd</sub>
 <article>
-  <canvas></canvas>
+  <svg class="timer" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="45"></circle>
+  </svg>
+  <section>
+
+  </section>
+  <figure>
+    <canvas></canvas>
+  </figure>
 </article>
