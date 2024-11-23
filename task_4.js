@@ -101,7 +101,7 @@ class diamond_NN {
         const e = t - output;
         this.BackPropogate(e);
         this.GD(lr);
-        S_errors += this.msqe(t, output);
+        S_errors += this.meanSquareError(t, output);
       }
     }
   }
@@ -114,9 +114,31 @@ class diamond_NN {
     }
   }
 
-  // sigmoid(x){
-  //   y=1/(1+)
-  // }
+  sigmoid(x){
+    const y=[]
+    for(let i = 0; i < x.length; i++){
+      y.push(1/(1+Math.E ** -x[i]));
+    }
+    // y.push(1/(1+Math.E ** -x));
+    console.log(y);
+    return y;
+  }
+
+  sigmoid_Derivative(x){
+    const sig_derivative = [];
+    for(let i = 0; i < x.length; i++){
+      sig_derivative.push(sig_derivative = x[i] * (1-x[i]))
+    }
+    // sig_derivative.push(sig_derivative = x * (1-x));
+    return sig_derivative;
+  }
+
+  meanSquareError(t, output){
+    // const msqe = [];
+    // for(let i = 0; i < t.length; i++){
+
+    // }
+  }
 }
 
 
