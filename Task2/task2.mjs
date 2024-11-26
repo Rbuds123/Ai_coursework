@@ -68,12 +68,8 @@ export function* generations() {
     // Normalise fitnesses
     const totalFitness = population.reduce((p, [_, f]) => p + f, 0);
 
-    // Pull out the fittest member.
-    yield [
-      structuredClone(population.at(-1)),
-      totalFitness / PARAMETERS.populationSize,
-      structuredClone(population.at(Math.floor(PARAMETERS.populationSize / 2)))
-    ];
+    // Produce the mean fitness
+    yield totalFitness / PARAMETERS.populationSize;
 
     let cumulativeProbability = 0;
     for (let i = 0; i < PARAMETERS.populationSize; i++) {

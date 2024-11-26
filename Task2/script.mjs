@@ -9,18 +9,23 @@ const chart = new Chart(
       animation: false,
       maintainAspectRatio: false, // Magically fixes a particular bug.
       plugins: {
-        legend: {
-          display: false,
-        },
         title: {
           text: 'Fitness over time',
           display: true,
         },
       },
       scales: {
+        x: {
+          title: {
+            text: 'Generation',
+            display: true
+          }
+        },
         y: {
-          // If the data sits outside these values, the chart is allowed to expand.
-          suggestedMin: 1600,
+          title: {
+            text: 'Fitness',
+            display: true
+          },
           suggestedMax: 2400,
         }
       }
@@ -30,14 +35,6 @@ const chart = new Chart(
       datasets: [
         {
           label: 'mean',
-          data: []
-        },
-        {
-          label: 'max',
-          data: []
-        },
-        {
-          label: 'median',
           data: []
         }
       ]
@@ -49,15 +46,9 @@ const generationIterator = generations();
 const circle = document.querySelector('.timer circle');
 
 function runGeneration() {
-  const { value, done } = generationIterator.next();
+  const { value: mean, done } = generationIterator.next();
   if (!done) {
-    const [max, mean, median] = value;
-
-    // Add fitness to chart
     chart.data.datasets.at(0).data.push(mean);
-    chart.data.datasets.at(1).data.push(max.at(1));
-    chart.data.datasets.at(2).data.push(median.at(1));
-
     chart.update();
   } else {
     circle.classList.add("finished");
