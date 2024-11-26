@@ -75,17 +75,19 @@ class GAApp:
         self.generate_button.pack()
 
         print(f"Generation {self.generation}: Initial Population")
+        print(f"chromosome: {self.current_chromosome}")
         self.print_chromosome()
 
     def draw_grid(self, chromosome):
         self.canvas.delete("all")
         for i in range(4):
             for j in range(8):
-                color = "blue" if chromosome[i * 8 + j] == 1 else "green"
+                color = "blue" if chromosome[i + j * 4] == 1 else "green"
+                self.canvas.create_rectangle(j * 40, i * 40, (j + 1) * 40, (i + 1) * 40, fill=color)
                 self.canvas.create_rectangle(j * 40, i * 40, (j + 1) * 40, (i + 1) * 40, fill=color)
     
     def generate(self):
-        if self.generation >= 100:  # Stop after 100 generations
+        if self.generation >= 100 or self.best_fitness == self.chromosome_length / 2:
             return
 
         self.generation += 1
@@ -97,16 +99,16 @@ class GAApp:
             self.best_fitness = current_best_fitness
             self.best_solution = current_best_solution
 
-        print(f"Generation {self.generation}: Best Fitness: {self.best_fitness}")
+        print(f"Generation {self.generation}: Best Fitness: {self.best_fitness} Chromosome: {self.current_chromosome}")
 
         self.current_chromosome = current_best_solution
         self.draw_grid(self.current_chromosome)
         self.info_label.config(text=f"Best Fitness: {self.best_fitness}, Generation: {self.generation}")
         self.print_chromosome()
-
+        self.root.after(500, self.generate)
     def print_chromosome(self):
-        print(f"Generation {self.generation}: Chromosome: {self.current_chromosome}")
-        
+        return self.generation, self.current_chromosome
+            
 if __name__ == "__main__":
     root = tk.Tk()
     app = GAApp(root)
