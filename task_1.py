@@ -73,6 +73,10 @@ class GAApp:
         # Start the auto-loop
         self.generate()
 
+        # Add this to your GUI setup code to create the generate button
+        self.generate_button = tk.Button(self.root, text="Generate", command=self.generate)
+        self.generate_button.pack()
+
     def draw_grid(self, chromosome):
         self.canvas.delete("all")
         for i in range(4):
@@ -81,7 +85,7 @@ class GAApp:
                 self.canvas.create_rectangle(j * 40, i * 40, (j + 1) * 40, (i + 1) * 40, fill=color)
     
     def generate(self):
-        if self.generation >= 100 or self.best_fitness == self.chromosome_length/2:  # Stop after 100 generations
+        if self.generation >= 100:  # Stop after 100 generations
             return
 
         self.generation += 1
@@ -92,14 +96,15 @@ class GAApp:
         if current_best_fitness > self.best_fitness:
             self.best_fitness = current_best_fitness
             self.best_solution = current_best_solution
-        
+
+        print(f"Generation {self.generation}: Best Fitness: {self.best_fitness}")
+
         self.current_chromosome = current_best_solution
         self.draw_grid(self.current_chromosome)
         self.info_label.config(text=f"Best Fitness: {self.best_fitness}, Generation: {self.generation}")
         self.print_chromosome()
 
-
-        self.root.after(500, self.generate)
+        #self.root.after(500, self.generate)
     
     def print_chromosome(self):
         print(f"Generation {self.generation}: Chromosome: {self.current_chromosome}")
