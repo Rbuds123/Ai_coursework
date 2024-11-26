@@ -6,9 +6,9 @@ const DATA = {
 
 export const PARAMETERS = {
   populationSize: 100,
-  generations: 25,
+  generations: 100,
   crossoverRate: 0.8,
-  mutationRate: 0.02,
+  mutationRate: 0.01,
   genomeSize: DATA.weights.length,
 }
 
@@ -65,15 +65,20 @@ export function* generations() {
     // Sort population, least fit first.
     population.sort((a, b) => a[1] - b[1]);
 
-    // Pull out the fittest member.
-    yield structuredClone(population.at(-1));
-
     // Normalise fitnesses
     const totalFitness = population.reduce((p, [_, f]) => p + f, 0);
-    let previousProbability = 0;
+
+    // Pull out the fittest member.
+    yield [
+      structuredClone(population.at(-1)),
+      totalFitness / PARAMETERS.populationSize,
+      structuredClone(population.at(Math.floor(PARAMETERS.populationSize / 2)))
+    ];
+
+    let cumulativeProbability = 0;
     for (let i = 0; i < PARAMETERS.populationSize; i++) {
-      previousProbability += population[i][1] / totalFitness;
-      population[i][1] = previousProbability;
+      cumulativeProbability += population[i][1] / totalFitness;
+      population[i][1] = cumulativeProbability;
     }
 
     // Generate next population

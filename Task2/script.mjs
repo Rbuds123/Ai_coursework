@@ -29,7 +29,15 @@ const chart = new Chart(
       labels: Array.from({ length: PARAMETERS.generations }, (_, k) => k),
       datasets: [
         {
-          label: 'fitness',
+          label: 'mean',
+          data: []
+        },
+        {
+          label: 'max',
+          data: []
+        },
+        {
+          label: 'median',
           data: []
         }
       ]
@@ -43,10 +51,13 @@ const circle = document.querySelector('.timer circle');
 function runGeneration() {
   const { value, done } = generationIterator.next();
   if (!done) {
-    const [individual, fitness] = value;
+    const [max, mean, median] = value;
 
     // Add fitness to chart
-    chart.data.datasets.at(0).data.push(fitness);
+    chart.data.datasets.at(0).data.push(mean);
+    chart.data.datasets.at(1).data.push(max.at(1));
+    chart.data.datasets.at(2).data.push(median.at(1));
+
     chart.update();
   } else {
     circle.classList.add("finished");
