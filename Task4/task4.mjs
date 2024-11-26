@@ -20,32 +20,88 @@ if (!localStorage.getItem('data-length')) {
   localStorage.setItem('data-length', csv.length);
 }
 
-function randomArray(length) {
-  return Array.from({length}, Math.random);
+/** Dot product of two arrays */
+const dot = (a, b) => a.reduce((p, c, i) => p + c * b[i], 0);
+
+/** Applies a sigmoid activation function to a value */
+const sigmoid = v => 1 / (1 + Math.exp(-v));
+
+/**
+ * @param {number[][]} layers 
+ * @param {Function} from 
+ */
+function edges(layers, from) {
+  // Take a clone to use the original dimensions
+  const matrix = structuredClone(layers);
+
+  // Work backwards through the layers
+  for (let index = matrix.length-1; index >= 0; index--) {
+    // Then fill in the edge array for each node.
+    for (const node of matrix[index].keys()) {
+      matrix[index][node] = Array.from({length: layers[index-1]?.length}, from);
+    }
+  }
+
+  return matrix;
 }
 
 class DiamondNN {
-  constructor(inputs, hiddenLayers = 2, outputs = 1) {
-    this.inputs = inputs;
-    this.hiddenLayers = hiddenLayers;
-    this.outputs = outputs;
+  constructor(inputs, hiddenLayers = 2, outputs = 1, learningRate = 0.1) {
+    this.learningRate = learningRate;
 
     // Based on a suggestion from https://www.linkedin.com/pulse/choosing-number-hidden-layers-neurons-neural-networks-sachdev/
     const hiddenLayerWidth = Math.ceil(Math.sqrt(inputs * outputs));
-    
-    // Generate a matrix with random values matching the shape of the NN.
-    const matrix = [];
-    matrix.push(randomArray(inputs));
-    for (let layer = 0; layer < hiddenLayers; layer++)
-      matrix.push(randomArray(hiddenLayerWidth));
-    matrix.push(randomArray(outputs));
+    const lengths = [inputs].concat(new Array(hiddenLayers).fill(hiddenLayerWidth)).concat(outputs)
 
-    // The random values are the starting weights.
-    this.weights = matrix;
+    this.layers = lengths.map(length => Array.from({length}, () => 0));
+    this.weights = edges(this.layers, Math.random);
+    this.derivatives = edges(this.layers, () => 0);
+  }
 
-    // The random values will be overwritten within the layers matrix.
-    this.layers = structuredClone(matrix);
+  /**
+   * Trains the neural network on a batch of inputs
+   * @param {number[][]} batch 
+   */
+  train(batch) {
+    for (const inputs of batch) {
+      this.forward(inputs);
+    }
+  }
+
+  /** @param {number[]} inputs */
+  forward(inputs) {
+    // Write the inputs into the matrix
+    this.layers[0] = inputs;
+
+    // Work through the hidden layers
+    for (let index = 1; index < this.layers.length; index++) {
+      // Work through each node of the layer
+      for (const node of this.layers[index].keys()) {
+        this.layers[index][node] = sigmoid(dot(this.layers[index-1], this.weights[index][node]) + 1);
+      }
+    }
+  }
+
+  get output() {
+    return this.layers.at(-1)[0];
+  }
+
+  /** @param {number[]} lengths */
+  static makeWeights(lengths) {
+    const matrix = lengths.map(length => new Array(length));
+    for (const [index, layer] of matrix.entries()) {
+      for (const node of layer.keys()) {
+        if (!matrix[index + 1]) break;
+        matrix[index][node] = Array.from({ length: lengths.at(index + 1) ?? 0 }, Math.random);
+      }
+    }
+    return matrix;
   }
 }
 
 const network = new DiamondNN(10);
+
+// console.log(structuredClone(network));
+network.forward(Array.from({length: 10}, Math.random));
+// console.log(structuredClone(network));
+console.log(network.output)

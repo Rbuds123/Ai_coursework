@@ -28,14 +28,9 @@ class diamond_NN {
     this.HL = HL;
     this.Y = Y;
     const L = [X, HL, HL, Y];
-    const derivativeArr = []; //initialise the derivative array
-    for(let i = 0; i < L.length; i++){
-      derivativeArr.push(0);
-    }
     const W = [];
-    const out = [];
-    this.derivativeArr = derivativeArr;
-    this.out = out;
+    this.derivativeArr = new Array(L.length).fill(0);
+    this.out = [];
     for (let i = 0; i < L.length - 1; i++) {
       const w = [Math.random(), Math.random()]
       W.push(w);
