@@ -2,23 +2,10 @@
 <title>Task 2</title>
 <script src="script.mjs" type="module" defer></script>
 <style>
-  body {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-  }
-
-  article {
-    display: flex;
-    flex-flow: row wrap;
-  }
-
-  svg.timer:hover circle {
-    animation: 0.001s linear 1s infinite reverse fillCircle;
-  }
-
+  /* Set the base styles for the timer */
   svg.timer {
-    width: 8em;
+    width: 1em;
+    vertical-align: text-top;
 
     circle {
       fill: none;
@@ -28,13 +15,44 @@
       transform: rotate(-90deg);
       transform-origin: center;
 
-      animation: 1s linear 1s infinite reverse fillCircle;
+      animation: 0.25s infinite linear reverse fillCircle;
+      animation-play-state: paused;
     }
 
     circle.finished {
       animation: none;
       stroke: greenyellow;
     }
+  }
+
+  label:has(input[type='checkbox']) {
+    font-size: 2em;
+    input {
+      display: none;
+
+      ~svg circle {
+        animation-play-state: paused;
+      }
+    }
+
+    input:checked~svg circle {
+      animation-play-state: running;
+    }
+  }
+
+  label:has(input[type='checkbox']):hover {
+    color: grey;
+  }
+
+  article {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  figure {
+    width: 30em;
+    height: 20em;
   }
 
   @keyframes fillCircle {
@@ -75,11 +93,15 @@
 <sub>4Core Logistics Ltd</sub>
 <article id="graph">
   <figure>
-    <svg class="timer" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="100" cy="100" r="45"></circle>
-    </svg>
     <canvas></canvas>
   </figure>
+  <label>
+    <input type="checkbox">
+    <svg class="timer" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="75" cy="75" r="45"></circle>
+    </svg>
+    Run Task 2
+  </label>
   <section>
 
   </section>

@@ -1,6 +1,12 @@
+/**
+ * A neural network to predict the price of a diamond based on its characteristics.
+ */
+
 const CUT = ['Fair', 'Good', 'Very Good', 'Premium', 'Ideal'];
 const COLOUR = ['J', 'I', 'H', 'G', 'F', 'E', 'D'];
 const CLARITY = ['I1', 'SI2', 'SI1', 'VS2', 'VS1', 'VVS2', 'VVS1', 'IF'];
+
+let DATA_LENGTH;
 
 // Load CSV into localStorage, so we can access it by line on-demand.
 // Using localStorage this way saves 3s on startup.
@@ -18,90 +24,102 @@ if (!localStorage.getItem('data-length')) {
 
   // We've set every single item, we can now mark it done.
   localStorage.setItem('data-length', csv.length);
+  DATA_LENGTH = csv.length;
 }
 
-/** Dot product of two arrays */
-const dot = (a, b) => a.reduce((p, c, i) => p + c * b[i], 0);
+const sigmoid = x => 1 / (1 + Math.exp(-x));
+const sigmoidDerivative = x => sigmoid(x) * (1 - sigmoid(x));
 
-/** Applies a sigmoid activation function to a value */
-const sigmoid = v => 1 / (1 + Math.exp(-v));
+class Neuron {
+  /** An array retaining the input for use in gradient descent @type {number[]} */
+  inputs;
+  /** The sum before the activation function, to be used with the derivative @type {number[]} */
+  weightedSum;
+  /** The weights from the previous layer to this neuron @type {number[]} */
+  weights;
+  /** @type {number} */
+  bias;
+  /** The final output of the node, post activation function @type {number} */
+  output;
 
-/**
- * @param {number[][]} layers 
- * @param {Function} from 
- */
-function edges(layers, from) {
-  // Take a clone to use the original dimensions
-  const matrix = structuredClone(layers);
-
-  // Work backwards through the layers
-  for (let index = matrix.length-1; index >= 0; index--) {
-    // Then fill in the edge array for each node.
-    for (const node of matrix[index].keys()) {
-      matrix[index][node] = Array.from({length: layers[index-1]?.length}, from);
-    }
+  constructor(inputSize, bias = Math.random() * 2 - 1) {
+    this.bias = bias;
+    // Generate random values from -1 to +1
+    this.weights = Array.from({ length: inputSize }, () => Math.random() * 2 - 1);
   }
 
-  return matrix;
+  activate(inputs) {
+    // Store the input to use in gradient descent
+    this.inputs = inputs;
+    this.weightedSum = this.weights.reduce((total, weight, index) => total + weight * inputs[index], 0) + this.bias;
+    // Put the output value through the activation function
+    this.output = sigmoid(this.weightedSum);
+    return this.output;
+  }
+
+  update(learningRate, delta) {
+    this.weights = this.weights.map((weight, index) => weight - learningRate * delta * this.inputs[index]);
+    this.bias -= learningRate * delta;
+  }
 }
 
 class DiamondNN {
-  constructor(inputs, hiddenLayers = 2, outputs = 1, learningRate = 0.1) {
+  /** @type {Neuron[][]} */
+  layers = [];
+
+  /** @type {number} */
+  learningRate;
+
+  constructor(inputSize, learningRate) {
     this.learningRate = learningRate;
 
     // Based on a suggestion from https://www.linkedin.com/pulse/choosing-number-hidden-layers-neurons-neural-networks-sachdev/
-    const hiddenLayerWidth = Math.ceil(Math.sqrt(inputs * outputs));
-    const lengths = [inputs].concat(new Array(hiddenLayers).fill(hiddenLayerWidth)).concat(outputs)
+    const hiddenLayerWidth = ~~(inputSize * .5);
 
-    this.layers = lengths.map(length => Array.from({length}, () => 0));
-    this.weights = edges(this.layers, Math.random);
-    this.derivatives = edges(this.layers, () => 0);
+    // A network with two hidden layers.
+    const layerSizes = [inputSize, hiddenLayerWidth, hiddenLayerWidth, 1];
+
+    // Generate neurons for each layer aside from the inputs.
+    for (let i = 1; i < layerSizes.length; i++) {
+      // Generate a layer with a weight vector with a size corresponding to the size of the outputs of the previous layer.
+      this.layers.push(Array.from({ length: layerSizes.at(i) }, () => new Neuron(layerSizes.at(i - 1))));
+    }
+  }
+
+  train(inputs, targets) {
+    this.forward(inputs);
+    this.backward(targets);
   }
 
   /**
-   * Trains the neural network on a batch of inputs
-   * @param {number[][]} batch 
+   * Runs the network forward end-to-end
+   * @param {number[]} inputs 
+   * @returns {number}
    */
-  train(batch) {
-    for (const inputs of batch) {
-      this.forward(inputs);
-    }
-  }
-
-  /** @param {number[]} inputs */
   forward(inputs) {
-    // Write the inputs into the matrix
-    this.layers[0] = inputs;
-
-    // Work through the hidden layers
-    for (let index = 1; index < this.layers.length; index++) {
-      // Work through each node of the layer
-      for (const node of this.layers[index].keys()) {
-        this.layers[index][node] = sigmoid(dot(this.layers[index-1], this.weights[index][node]) + 1);
-      }
-    }
+    // Brilliant trick inspired by https://medium.com/@pat_metzdorf/building-a-basic-neural-net-using-javascript-1f554780dc60
+    return this.layers.reduce((input, layer) => layer.map(neuron => neuron.activate(input)), inputs);
   }
 
-  get output() {
-    return this.layers.at(-1)[0];
-  }
-
-  /** @param {number[]} lengths */
-  static makeWeights(lengths) {
-    const matrix = lengths.map(length => new Array(length));
-    for (const [index, layer] of matrix.entries()) {
-      for (const node of layer.keys()) {
-        if (!matrix[index + 1]) break;
-        matrix[index][node] = Array.from({ length: lengths.at(index + 1) ?? 0 }, Math.random);
-      }
+  /**
+   * Does backpropogation and gradient descent in one
+   * @param {number[]} targets 
+   */
+  backward(targets) {
+    let deltas = this.layers.at(-1).map((neuron, index) => (neuron.output - targets[index]) * sigmoidDerivative(neuron.weightedSum));
+    for (let i = this.layers.length - 1; i >= 0; i--) {
+      deltas = this.layers.at(i).map((neuron, index) => {
+        const delta = sigmoidDerivative(neuron.weightedSum) * deltas.at(index % deltas.length);
+        neuron.update(this.learningRate, delta);
+        return neuron.weights.map(weight => weight * delta);
+      });
     }
-    return matrix;
   }
 }
 
-const network = new DiamondNN(10);
+const n = new DiamondNN(9, 0.02);
+const m = structuredClone(n);
+n.train(Array.from({ length: 9 }, Math.random), [Math.random()]);
+console.log("---");
+console.log(m.layers.at(0).at(0).weights, n.layers.at(0).at(0).weights);
 
-// console.log(structuredClone(network));
-network.forward(Array.from({length: 10}, Math.random));
-// console.log(structuredClone(network));
-console.log(network.output)
