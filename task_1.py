@@ -121,7 +121,8 @@ class GAApp:
                 self.canvas.create_rectangle(j * 40, i * 40, (j + 1) * 40, (i + 1) * 40, fill=color)
     
     def generate(self):
-        if self.generation >= 100 or self.best_fitness == self.chromosome_length // 2:  # Stop after 100 generations or if the fitness is half the chromosome length
+         # Stop after 100 generations or if the fitness is half the chromosome length resulting in the max fitness being reached 
+        if self.generation >= 100 or self.best_fitness == self.chromosome_length // 2:
             return
 #increment the generation by 1 and create a new generation of the population
         self.generation += 1
@@ -144,6 +145,7 @@ class GAApp:
         self.root.after(500, self.generate)
 
     def print_chromosome(self):
+        
         return self.generation, self.current_chromosome
             
 if __name__ == "__main__":
