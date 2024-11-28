@@ -51,11 +51,29 @@
     width: 30em;
     height: 20em;
   }
+
+  .truckRect {
+    stroke: black;
+    fill: white;
+    stroke-width: 2px;
+  }
+
+  .wheel {
+    fill: grey;
+    stroke: black;
+    stroke-width: 2px;
+  }
+
+  .boxSlot {
+    stroke: black;
+    stroke-dasharray: 6,6;
+    fill: white;
+  }
 </style>
 <!-- -->
 <h1>Lorry Loading</h1>
 <sub>4Core Logistics Ltd</sub>
-<article>
+<article id="graph">
   <figure>
     <svg class="timer" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
       <circle cx="100" cy="100" r="45"></circle>
@@ -65,4 +83,39 @@
   <section>
 
   </section>
+</article>
+
+<article>
+  <figure>
+    <svg id="truck" viewBox="0 0 550 500" xmlns="http://www.w3.org/2000/svg">
+      <circle class="wheel" cx="30" cy="200" r="15"/>
+      <circle class="wheel" cx="100" cy="200" r="15"/>
+      <circle class="wheel" cx="350" cy="200" r="15"/>
+      <circle class="wheel" cx="390" cy="200" r="15"/>
+      <circle class="wheel" cx="430" cy="200" r="15"/>
+      <rect class="truckRect" y="40" width="60" height="160"/>
+      <rect class="truckRect" x="60" width="460" height="200"/>
+      <rect x="5" y="55" width="50" height="30" fill="grey"/>
+      <rect id="slot1" class="boxSlot" x="70" y="110" width="80" height="80"/>
+      <rect id="slot2" class="boxSlot" x="160" y="110" width="80" height="80"/>
+      <rect id="slot3" class="boxSlot" x="250" y="110" width="80" height="80"/>
+      <rect id="slot4" class="boxSlot" x="340" y="110" width="80" height="80"/>
+      <rect id="slot5" class="boxSlot" x="430" y="110" width="80" height="80"/>
+      <rect id="slot6" class="boxSlot" x="70" y="20" width="80" height="80"/>
+      <rect id="slot7" class="boxSlot" x="160" y="20" width="80" height="80"/>
+      <rect id="slot8" class="boxSlot" x="250" y="20" width="80" height="80"/>
+      <rect id="slot9" class="boxSlot" x="340" y="20" width="80" height="80"/>
+      <rect id="slot10" class="boxSlot" x="430" y="20" width="80" height="80"/>
+      <rect id="box1" class="box, hidden" width="80" height="80" fill="red"/>
+      <rect id="box2" class="box, hidden" width="80" height="80" fill="purple"/>
+      <rect id="box3" class="box, hidden" width="80" height="80" fill="green"/>
+      <rect id="box4" class="box, hidden" width="80" height="80" fill="blue"/>
+      <rect id="box5" class="box, hidden" width="80" height="80" fill="yellow"/>
+      <rect id="box6" class="box, hidden" width="80" height="80" fill="pink"/>
+      <rect id="box7" class="box, hidden" width="80" height="80" fill="orange"/>
+      <rect id="box8" class="box, hidden" width="80" height="80" fill="brown"/>
+      <rect id="box9" class="box, hidden" width="80" height="80" fill="turquoise"/>
+      <rect id="box10" class="box, hidden" width="80" height="80" fill="grey"/>
+    </svg>
+  </figure>
 </article>
