@@ -3,7 +3,7 @@ const minPrice = 200;
 const maxPrice = 30000;
 const csv = require('csv-parser')
 const fs = require('fs')
-const results = [];
+const results = { diamonds: [] };
 const population = []
 
 //cant be a binary string for the population
@@ -16,8 +16,11 @@ const clarityArray = ['I1', 'SI2', 'SI1', 'VS2', 'VS1', 'VVS2', 'VVS1', 'IF'];
 
 function dotProduct(v1, v2) {
   let result = 0;
+  console.log(v1);
+  console.log(v2);
   for (let i = 0; i < v1.length; i++) {
     result += v1[i] * v2[i];
+    console.log(result);
   }
   return result;
 }
@@ -29,13 +32,8 @@ class diamond_NN {
     this.Y = Y;
     const L = [X, HL, HL, Y];
     const derivativeArr = []; //initialise the derivative array
-    for(let i = 0; i < L.length; i++){
-      derivativeArr.push(0);
-    }
     const W = [];
     const out = [];
-    this.derivativeArr = derivativeArr;
-    this.out = out;
     for (let i = 0; i < L.length - 1; i++) {
       const w = [Math.random(), Math.random()]
       W.push(w);
@@ -75,42 +73,31 @@ class diamond_NN {
   // }
 
   FF(x) {
-    let out = x;
-    this.out[0];
-    for (let i = 0; i < this.W.length; i++) {
-      const Xnext = dotProduct(out, this.W[i]);
+    let out = [1, 2];
+    for (let i = 0; i < W.length; i++) {
+      const Xnext = dotProduct(out, W[i]);
       out = this.sigmoid(Xnext);
-      this.out[i+1] = out;
     }
     return out;
   }
 
   BackPropogate(error) {
-    for(let i = this.derivativeArr.length-1; i <= 0; i--){
+    for(let i = this.derivativeArr.length-1; i < 0; i--){
       const out = this.out[i+1];
       const delta = error * this.sigmoid_Derivative(out);
-      const fixed_delta = [];
-      for(let i = 0; i < delta.length; i++){
-        fixed_delta.push([delta[i]]);
-      }
-      let current_Out = this.out[i];
-      let column_Out = [];
-      column_Out.push([current_Out[i]]);
-      // for(let i = 0; i < current_Out.length; i++){
-      //   column_Out.push([current_Out[i]]);
-      // }
-      this.derivativeArr[i] = dotProduct(column_Out, fixed_delta);
-      error = dotProduct(delta, this.W);
+      console.log(delta);
+      // const fixed_Delta = delta
+      current_Out = this.out[i];
+      // current_Out = 
     }
   }
 
   train_NN(x, target, epochs, lr){
     for(let i = 0; i < epochs; i++){
-      let S_errors = 0;
-      console.log(i);
+      S_errors = 0;
       for(let j = 0; j < x.length; i++){
         const t = target[j]
-        const output = this.FF(j);
+        const output = this.FF(input);
         const e = t - output;
         this.BackPropogate(e);
         this.GD(lr);
@@ -121,9 +108,9 @@ class diamond_NN {
   
   GD(lr = 0.05) {
     for(let i = 0; i < this.W.length; i++){
-      const W = this.W[i];
-      const derivativeArr = this.derivativeArr[i];
-      this.W += this.derivativeArr*lr;
+      W = this.W[i];
+      derivativeArr = this.derivativeArr[i];
+      W += derivativeArr*lr;
     }
   }
 
@@ -133,54 +120,35 @@ class diamond_NN {
       y.push(1/(1+Math.E ** -x[i]));
     }
     // y.push(1/(1+Math.E ** -x));
-    // console.log(y);
+    console.log(y);
     return y;
   }
 
   sigmoid_Derivative(x){
     const sig_derivative = [];
-    // for(let i = 0; i < x.length; i++){
-    //   sig_derivative.push(sig_derivative = x[i] * (1-x[i]))
-    // }
-    sig_derivative.push(x * (1-x));
+    for(let i = 0; i < x.length; i++){
+      sig_derivative.push(sig_derivative = x[i] * (1-x[i]))
+    }
+    // sig_derivative.push(sig_derivative = x * (1-x));
     return sig_derivative;
   }
 
   meanSquareError(t, output){
-    let msqe;
-    let t_output = [];
+    // const msqe = [];
+    // for(let i = 0; i < t.length; i++){
 
-    for(let i = 0; i < output.length; i++){
-      t_output.push((t-output[i]) ** 2);
-    }
-    for(let i = 0; i < t_output.length; i++){
-      msqe += t_output;
-    }
-    msqe = msqe/t_output;
-    return msqe;
+    // }
   }
-}
-
-function init(){
-  const training_inputs = [];
-  const targets = [];
-  for(let i = 0; i < 1000; i++){
-    training_inputs.push(results[Math.random()*53941]);
-    targets.push(Math.random()*18823);
-  }
-
-  const nn = new diamond_NN(2,5,1);
-  nn.train_NN(training_inputs, targets, 10, 0.1);
 }
 
 
 function csv_Parse() {
   fs.createReadStream('data.csv')
     .pipe(csv())
-    .on('data', (data) => results.push(data))
+    .on('data', (data) => results.diamonds.push(data))
     .on('end', () => {
-      // console.log(results.diamonds);
-      // console.log('ok');
+      console.log(results.diamonds);
+      console.log('ok');
     });
 }
 
@@ -189,5 +157,4 @@ function csv_Parse() {
 //   derivativeArr.push(d);
 // }
 
-init();
 csv_Parse();
