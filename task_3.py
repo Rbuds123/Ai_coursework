@@ -58,7 +58,7 @@ class Neural_network(object):
             if i > 0:
                 Er = np.dot(D, self.W[i].T)
 
-    def train_nn(self, x, target, epochs, lr, batch_size=32):
+    def train_nn(self, x, target, epochs, lr, batch_size):
         n_batches = len(x) // batch_size
         history = []
         
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     training_inputs = (training_inputs - input_mean) / input_std
     targets = (targets - target_mean) / target_std
     #set HL to  because any lower and the neural network doesnt aproxmite well
-    nn = Neural_network(1, [30, 40], 1)
+    nn = Neural_network(1, [40, 20], 1)
     history = nn.train_nn(training_inputs, targets, epochs=400, lr=0.002, batch_size=32)
     
     test_inputs = np.linspace(x_width * -1, x_width, 200).reshape(-1, 1)
