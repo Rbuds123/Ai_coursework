@@ -72,6 +72,19 @@ def mutate(chromosome, mutation_rate):
     return chromosome
 
 def new_generation(population, mutation_rate):
+    """
+    This function takes the current population and a mutation rate as inputs,
+    and returns a new population generated through selection, crossover, and mutation.
+    Generates a new population using genetic algorithm techniques.
+
+    Args:
+        population (list): A list of individuals representing the current population.
+        mutation_rate (float): The probability of mutation occurring in an offspring.
+
+    Returns:
+        list: A new population generated through selection, crossover, and mutation.
+    """
+    
     new_pop = []
     fitnesses = [fitness(chromo) for chromo in population]
     for _ in range(len(population) // 2):
