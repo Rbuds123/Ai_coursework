@@ -2,7 +2,7 @@ import numpy as np
 import csv
 import matplotlib.pyplot as plt
 
-class NeuralNetworkReLU:
+class NeuralNetwork:
     def __init__(self, X, HL, Y):
         self.X = X
         self.HL = HL
@@ -137,7 +137,7 @@ def train_test_split_manual(data, labels, test_size=0.2, seed=42):
 x_train, x_test, y_train, y_test = train_test_split_manual(features, target, test_size=0.2)
 
 # Create and train the neural network
-nn = NeuralNetworkReLU(X=x_train.shape[1], HL=[128, 64, 32], Y=1)
+nn = NeuralNetwork(X=x_train.shape[1], HL=[128, 64, 32], Y=1)
 history = nn.train(x_train, y_train, epochs=400, learning_rate=0.001)
 
 # Predict on test data
