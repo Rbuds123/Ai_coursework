@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 class Neural_network(object):
-    def __init__(self, X=1, HL=[64, 32], Y=1):
+    def __init__(self, X, HL, Y):
         self.X = X
         self.HL = HL
         self.Y = Y
@@ -97,7 +97,7 @@ class Neural_network(object):
                 
         return history
 
-    def GD(self, lr=0.01):
+    def GD(self, lr):
         for i in range(len(self.W)):
             self.W[i] += self.Der_W[i] * lr
             self.B[i] += self.Der_B[i] * lr
@@ -107,18 +107,19 @@ class Neural_network(object):
 
 if __name__ == "__main__":
     np.random.seed(42)
-    x_width = 20 
-    training_inputs = np.array([[random() * x_width * 2 - x_width] for _ in range(1000)])
-    targets = np.array([[3 * x[0] + 0.7 * x[0] ** 2] for x in training_inputs])
+    x_width = 20
+    # x_width = int(input("Enter the width of the x-axis: ")) 
+    training_inputs = np.array([[random() * x_width * 2 - x_width] for _ in range(100)])
+    targets = np.array([[3 * x + 0.7 * x ** 2] for x in training_inputs])
     
     input_mean, input_std = training_inputs.mean(), training_inputs.std()
     target_mean, target_std = targets.mean(), targets.std()
     
     training_inputs = (training_inputs - input_mean) / input_std
     targets = (targets - target_mean) / target_std
-    
-    nn = Neural_network(1, [64, 32], 1)
-    history = nn.train_nn(training_inputs, targets, epochs=400, lr=0.001, batch_size=32)
+    #set HL to  because any lower and the neural network doesnt aproxmite well
+    nn = Neural_network(1, [30, 15], 1)
+    history = nn.train_nn(training_inputs, targets, epochs=400, lr=0.002, batch_size=32)
     
     test_inputs = np.linspace(x_width * -1, x_width, 200).reshape(-1, 1)
     true_outputs = 3 * test_inputs + 0.7 * (test_inputs ** 2)
