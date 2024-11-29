@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <title>Task 2</title>
+<meta charset="UTF-8">
 <script src="script.mjs" type="module" defer></script>
 <style>
   /* Set the base styles for the timer */
@@ -87,6 +88,10 @@
     stroke-dasharray: 6,6;
     fill: white;
   }
+
+  .hidden {
+    display: none;
+  }
 </style>
 <!-- -->
 <h1>Lorry Loading</h1>
@@ -109,6 +114,7 @@
 
 <article>
   <figure>
+    <label for="box7">11</label>
     <svg id="truck" viewBox="0 0 550 500" xmlns="http://www.w3.org/2000/svg">
       <circle class="wheel" cx="30" cy="200" r="15"/>
       <circle class="wheel" cx="100" cy="200" r="15"/>
@@ -128,16 +134,49 @@
       <rect id="slot8" class="boxSlot" x="250" y="20" width="80" height="80"/>
       <rect id="slot9" class="boxSlot" x="340" y="20" width="80" height="80"/>
       <rect id="slot10" class="boxSlot" x="430" y="20" width="80" height="80"/>
-      <rect id="box1" class="box, hidden" width="80" height="80" fill="red"/>
-      <rect id="box2" class="box, hidden" width="80" height="80" fill="purple"/>
-      <rect id="box3" class="box, hidden" width="80" height="80" fill="green"/>
-      <rect id="box4" class="box, hidden" width="80" height="80" fill="blue"/>
-      <rect id="box5" class="box, hidden" width="80" height="80" fill="yellow"/>
-      <rect id="box6" class="box, hidden" width="80" height="80" fill="pink"/>
-      <rect id="box7" class="box, hidden" width="80" height="80" fill="orange"/>
-      <rect id="box8" class="box, hidden" width="80" height="80" fill="brown"/>
-      <rect id="box9" class="box, hidden" width="80" height="80" fill="turquoise"/>
-      <rect id="box10" class="box, hidden" width="80" height="80" fill="grey"/>
+      <g>
+        <rect id="box1" class="box hidden" width="80" height="80" fill="red"/>
+      </g>
+      <g>
+        <rect id="box2" class="box hidden" width="80" height="80" fill="purple"/>
+      </g>
+      <g>
+        <rect id="box3" class="box hidden" width="80" height="80" fill="green"/>
+      </g>
+      <g>
+        <rect id="box4" class="box hidden" width="80" height="80" fill="blue"/>
+      </g>
+      <g>
+        <rect id="box5" class="box hidden" width="80" height="80" fill="yellow"/>
+      </g>
+      <g>
+        <rect id="box6" class="box hidden" width="80" height="80" fill="pink"/>
+      </g>
+      <g>
+        <rect id="box7" class="box hidden" width="80" height="80" fill="orange" name="box7"/>
+      </g>
+      <g>
+        <rect id="box8" class="box hidden" width="80" height="80" fill="brown"/>
+      </g>
+      <g>
+        <rect id="box9" class="box hidden" width="80" height="80" fill="turquoise"/>
+      </g>
+      <g>
+        <rect id="box10" class="box hidden" width="80" height="80" fill="grey"/>
+      </g>
     </svg>
   </figure>
+  <p id="fitnessDisplay"></p>
+  <segment id="legend">
+    <p>Red: £126000 3 tonnes</p>
+    <p>Purple: £154000 8 tonnes</p>
+    <p>Green: £256000 2 tonnes</p>
+    <p>Blue: £526000 9 tonnes</p>
+    <p>Yellow: £388000 7 tonnes</p>
+    <p>Pink: £245000 1 tonne</p>
+    <p>Orange: £210000 8 tonnes</p>
+    <p>Brown: £442000 13 tonnes</p>
+    <p>Turquoise: £671000 10 tonnes</p>
+    <p>Grey: £348000 9 tonnes</p>
+  </segment>
 </article>
