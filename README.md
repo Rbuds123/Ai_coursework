@@ -1,21 +1,37 @@
 # AI Coursework
 
-## dependacies:
-matplotlib
+## Dependencies
+```sh
+pip install -r requirements.txt
 ```
-pip install matplot lib
-```
-numpy
-```
-pip install numpy
-```
-## task 1: maximizing 1's and minimizing 1's 
-task 1 is showing a visual representation of maximizing and minimizing the 1's
-the blue parts represent 1's and the 0's represent green
 
-## 2 - 4Core Logistics Ltd
-![Truck I drew](truck.png "Truck")
+## 1: Maximising & Minimising 1s
+```sh
+python3 task_1.py
+```
 
+Blue represents 1, green represents 0.
 
-## task 3: plotting a function on a grapgh 
+## 2: 4Core Logistics Ltd
+```sh
+python3 -m http.server -D Task2
+```
+or
+```sh
+cd Task2
+python3 -m http.server
+```
+Navigate to `http://localhost:8080/`
+
+![Truck I drew](truck.png "Truck I drew")
+
+## 3: Function Approximation
+```sh
+python3 task_3.py
+```
 the following task 3 shows a neural network aproximating a given function and also shows the mean squared average of the neural network
+
+## 4: Diamond Prices
+```sh
+python3 task_4.py
+```
