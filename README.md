@@ -1,11 +1,11 @@
 # AI Coursework
 
 ## dependacies:
-numpy
 matplotlib
 ```
 pip install matplot lib
 ```
+numpy
 ```
 pip install numpy
 ```
