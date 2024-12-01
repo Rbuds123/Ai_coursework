@@ -72,7 +72,6 @@ export function* generations() {
         mass += DATA.weights[i];
       }
     }
-    console.log(mass);
 
     // Normalise fitnesses
     const totalFitness = population.reduce((p, [_, f]) => p + f, 0);
@@ -94,8 +93,6 @@ export function* generations() {
       // Find the two individuals who are just above the arrow
       const [parentA] = population.find(([_, f]) => f > selectorA);
       const [parentB] = population.find(([_, f]) => f > selectorB);
-      console.log(parentA);
-      console.log(parentB);
 
       // Breed the two individuals
       const [childA, childB] = parentA.breed(parentB);

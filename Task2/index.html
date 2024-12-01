@@ -2,181 +2,91 @@
 <title>Task 2</title>
 <meta charset="UTF-8">
 <script src="script.mjs" type="module" defer></script>
-<style>
-  /* Set the base styles for the timer */
-  svg.timer {
-    width: 1em;
-    vertical-align: text-top;
-
-    circle {
-      fill: none;
-      stroke: grey;
-      stroke-width: 1em;
-
-      transform: rotate(-90deg);
-      transform-origin: center;
-
-      animation: 0.25s infinite linear reverse fillCircle;
-      animation-play-state: paused;
-    }
-
-    circle.finished {
-      animation: none;
-      stroke: greenyellow;
-    }
-  }
-
-  label:has(input[type='checkbox']) {
-    font-size: 2em;
-    input {
-      display: none;
-
-      ~svg circle {
-        animation-play-state: paused;
-      }
-    }
-
-    input:checked~svg circle {
-      animation-play-state: running;
-    }
-  }
-
-  label:has(input[type='checkbox']):hover {
-    color: grey;
-  }
-
-  article {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  figure {
-    width: 30em;
-    height: 20em;
-  }
-
-  @keyframes fillCircle {
-    5% {
-      stroke-dasharray: 0 283;
-    }
-
-    100% {
-      stroke-dasharray: 283 283;
-    }
-  }
-
-  figure {
-    width: 30em;
-    height: 20em;
-  }
-
-  .truckRect {
-    stroke: black;
-    fill: white;
-    stroke-width: 2px;
-  }
-
-  .wheel {
-    fill: grey;
-    stroke: black;
-    stroke-width: 2px;
-  }
-
-  .boxSlot {
-    stroke: black;
-    stroke-dasharray: 6,6;
-    fill: white;
-  }
-
-  .hidden {
-    display: none;
-  }
-</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic">
+<link rel="stylesheet" href="style.css">
 <!-- -->
-<h1>Lorry Loading</h1>
-<sub>4Core Logistics Ltd</sub>
-<article id="graph">
-  <figure>
-    <canvas></canvas>
-  </figure>
+<header>
+  <h1>Task 2: 4Core Logistics Ltd</h1>
   <label>
-    <input type="checkbox">
     <svg class="timer" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
       <circle cx="75" cy="75" r="45"></circle>
     </svg>
-    Run Task 2
+    <input type="checkbox">
+    <span class="toggle button">Run Task 2</span>
   </label>
-  <section>
-
+</header>
+<main>
+  <section id="graph">
+    <figure>
+      <canvas></canvas>
+    </figure>
   </section>
-</article>
-
-<article>
-  <figure>
-    <label for="box7">11</label>
-    <svg id="truck" viewBox="0 0 550 500" xmlns="http://www.w3.org/2000/svg">
-      <circle class="wheel" cx="30" cy="200" r="15"/>
-      <circle class="wheel" cx="100" cy="200" r="15"/>
-      <circle class="wheel" cx="350" cy="200" r="15"/>
-      <circle class="wheel" cx="390" cy="200" r="15"/>
-      <circle class="wheel" cx="430" cy="200" r="15"/>
-      <rect class="truckRect" y="40" width="60" height="160"/>
-      <rect class="truckRect" x="60" width="460" height="200"/>
-      <rect x="5" y="55" width="50" height="30" fill="grey"/>
-      <rect id="slot1" class="boxSlot" x="70" y="110" width="80" height="80"/>
-      <rect id="slot2" class="boxSlot" x="160" y="110" width="80" height="80"/>
-      <rect id="slot3" class="boxSlot" x="250" y="110" width="80" height="80"/>
-      <rect id="slot4" class="boxSlot" x="340" y="110" width="80" height="80"/>
-      <rect id="slot5" class="boxSlot" x="430" y="110" width="80" height="80"/>
-      <rect id="slot6" class="boxSlot" x="70" y="20" width="80" height="80"/>
-      <rect id="slot7" class="boxSlot" x="160" y="20" width="80" height="80"/>
-      <rect id="slot8" class="boxSlot" x="250" y="20" width="80" height="80"/>
-      <rect id="slot9" class="boxSlot" x="340" y="20" width="80" height="80"/>
-      <rect id="slot10" class="boxSlot" x="430" y="20" width="80" height="80"/>
-      <g>
-        <rect id="box1" class="box hidden" width="80" height="80" fill="red"/>
-      </g>
-      <g>
-        <rect id="box2" class="box hidden" width="80" height="80" fill="purple"/>
-      </g>
-      <g>
-        <rect id="box3" class="box hidden" width="80" height="80" fill="green"/>
-      </g>
-      <g>
-        <rect id="box4" class="box hidden" width="80" height="80" fill="blue"/>
-      </g>
-      <g>
-        <rect id="box5" class="box hidden" width="80" height="80" fill="yellow"/>
-      </g>
-      <g>
-        <rect id="box6" class="box hidden" width="80" height="80" fill="pink"/>
-      </g>
-      <g>
-        <rect id="box7" class="box hidden" width="80" height="80" fill="orange" name="box7"/>
-      </g>
-      <g>
-        <rect id="box8" class="box hidden" width="80" height="80" fill="brown"/>
-      </g>
-      <g>
-        <rect id="box9" class="box hidden" width="80" height="80" fill="turquoise"/>
-      </g>
-      <g>
-        <rect id="box10" class="box hidden" width="80" height="80" fill="grey"/>
-      </g>
-    </svg>
-  </figure>
-  <p id="fitnessDisplay"></p>
-  <segment id="legend">
-    <p>Red: £126000 3 tonnes</p>
-    <p>Purple: £154000 8 tonnes</p>
-    <p>Green: £256000 2 tonnes</p>
-    <p>Blue: £526000 9 tonnes</p>
-    <p>Yellow: £388000 7 tonnes</p>
-    <p>Pink: £245000 1 tonne</p>
-    <p>Orange: £210000 8 tonnes</p>
-    <p>Brown: £442000 13 tonnes</p>
-    <p>Turquoise: £671000 10 tonnes</p>
-    <p>Grey: £348000 9 tonnes</p>
-  </segment>
-</article>
+  <section>
+    <figure>
+      <svg id="truck" viewBox="0 0 550 250" xmlns="http://www.w3.org/2000/svg">
+        <circle class="wheel" cx="30" cy="200" r="15" />
+        <circle class="wheel" cx="100" cy="200" r="15" />
+        <circle class="wheel" cx="350" cy="200" r="15" />
+        <circle class="wheel" cx="390" cy="200" r="15" />
+        <circle class="wheel" cx="430" cy="200" r="15" />
+        <rect class="truckRect" y="40" width="60" height="160" />
+        <rect class="truckRect" x="60" width="460" height="200" />
+        <rect x="5" y="55" width="50" height="30" fill="grey" />
+        <rect id="slot1" class="boxSlot" x="70" y="110" width="80" height="80" />
+        <rect id="slot2" class="boxSlot" x="160" y="110" width="80" height="80" />
+        <rect id="slot3" class="boxSlot" x="250" y="110" width="80" height="80" />
+        <rect id="slot4" class="boxSlot" x="340" y="110" width="80" height="80" />
+        <rect id="slot5" class="boxSlot" x="430" y="110" width="80" height="80" />
+        <rect id="slot6" class="boxSlot" x="70" y="20" width="80" height="80" />
+        <rect id="slot7" class="boxSlot" x="160" y="20" width="80" height="80" />
+        <rect id="slot8" class="boxSlot" x="250" y="20" width="80" height="80" />
+        <rect id="slot9" class="boxSlot" x="340" y="20" width="80" height="80" />
+        <rect id="slot10" class="boxSlot" x="430" y="20" width="80" height="80" />
+        <g>
+          <rect id="box1" class="box hidden" width="80" height="80" fill="red" />
+        </g>
+        <g>
+          <rect id="box2" class="box hidden" width="80" height="80" fill="purple" />
+        </g>
+        <g>
+          <rect id="box3" class="box hidden" width="80" height="80" fill="green" />
+        </g>
+        <g>
+          <rect id="box4" class="box hidden" width="80" height="80" fill="blue" />
+        </g>
+        <g>
+          <rect id="box5" class="box hidden" width="80" height="80" fill="yellow" />
+        </g>
+        <g>
+          <rect id="box6" class="box hidden" width="80" height="80" fill="pink" />
+        </g>
+        <g>
+          <rect id="box7" class="box hidden" width="80" height="80" fill="orange" name="box7" />
+        </g>
+        <g>
+          <rect id="box8" class="box hidden" width="80" height="80" fill="brown" />
+        </g>
+        <g>
+          <rect id="box9" class="box hidden" width="80" height="80" fill="turquoise" />
+        </g>
+        <g>
+          <rect id="box10" class="box hidden" width="80" height="80" fill="grey" />
+        </g>
+      </svg>
+      <h2>Fittest</h2>
+      <span id="fitnessDisplay">£???k ??T</span>
+    </figure>
+  </section>
+  <section id="legend">
+    <p>Red: £126k - 3T</p>
+    <p>Purple: £154k - 8T</p>
+    <p>Green: £256k - 2T</p>
+    <p>Blue: £526k - 9T</p>
+    <p>Yellow: £388k - 7T</p>
+    <p>Pink: £245k - 1T</p>
+    <p>Orange: £210k - 8T</p>
+    <p>Brown: £442k - 13T</p>
+    <p>Turquoise: £671k - 10T</p>
+    <p>Grey: £348k - 9T</p>
+  </section>
+</main>

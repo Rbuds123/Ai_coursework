@@ -48,18 +48,15 @@ const circle = document.querySelector('.timer circle');
 function runGeneration() {
   const { value: things, done } = generationIterator.next();
   const boxes = document.querySelectorAll(".box");
-  // console.log(boxes);
   const slots = document.querySelectorAll(".boxSlot");
-  const text = document.querySelectorAll('.boxText');
   const fitnessDisplay = document.querySelector('#fitnessDisplay');
   const fittest = things[1];
-  // console.log(fittest);
   let usedSlots = 0;
   if (!done) {
     chart.data.datasets.at(0).data.push(things[0]);
     chart.update();
-    for(let i = 0; i < fittest.length; i++){
-      if(fittest[i] == 1){
+    for (let i = 0; i < fittest.length; i++) {
+      if (fittest[i] == 1) {
         boxes[i].x.baseVal.value = slots[usedSlots].x.baseVal.value;
         boxes[i].y.baseVal.value = slots[usedSlots].y.baseVal.value;
         boxes[i].style = `left: ${slots[usedSlots].x}, top: ${slots[usedSlots].y}`;
@@ -69,7 +66,7 @@ function runGeneration() {
         boxes[i].classList.add('hidden');
       }
     }
-    fitnessDisplay.textContent = '£' + things[2] + '000 ' + things[3] + ' tonnes';
+    fitnessDisplay.textContent = '£' + things[2] + 'k - ' + things[3] + 'T';
   } else {
     circle.classList.add("finished");
   }
