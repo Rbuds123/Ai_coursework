@@ -88,7 +88,7 @@ class Neural_network(object):
             avg_error = epoch_error / n_batches
             history.append(avg_error)
             
-            if (epoch + 1) % 100 == 0:
+            if (epoch + 1) % 10 == 0:
                 print(f"Epoch {epoch + 1}/{epochs}, Average Error: {avg_error:.6f}")
             
             if avg_error < 1e-6:
@@ -117,9 +117,8 @@ if __name__ == "__main__":
     
     training_inputs = (training_inputs - input_mean) / input_std
     targets = (targets - target_mean) / target_std
-    #set HL to  because any lower and the neural network doesnt aproxmite well
-    nn = Neural_network(1, [40, 20], 1)
-    history = nn.train_nn(training_inputs, targets, epochs=400, lr=0.002, batch_size=32)
+    nn = Neural_network(1, [64, 16, 32], 1)
+    history = nn.train_nn(training_inputs, targets, epochs=200, lr=0.002, batch_size=64)
     
     test_inputs = np.linspace(x_width * -1, x_width, 200).reshape(-1, 1)
     true_outputs = 3 * test_inputs + 0.7 * (test_inputs ** 2)
