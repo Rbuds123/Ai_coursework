@@ -9,18 +9,23 @@ const chart = new Chart(
       animation: false,
       maintainAspectRatio: false, // Magically fixes a particular bug.
       plugins: {
-        legend: {
-          display: false,
-        },
         title: {
           text: 'Fitness over time',
           display: true,
         },
       },
       scales: {
+        x: {
+          title: {
+            text: 'Generation',
+            display: true
+          }
+        },
         y: {
-          // If the data sits outside these values, the chart is allowed to expand.
-          suggestedMin: 1600,
+          title: {
+            text: 'Fitness',
+            display: true
+          },
           suggestedMax: 2400,
         }
       }
@@ -29,7 +34,7 @@ const chart = new Chart(
       labels: Array.from({ length: PARAMETERS.generations }, (_, k) => k),
       datasets: [
         {
-          label: 'fitness',
+          label: 'mean',
           data: []
         }
       ]
@@ -41,13 +46,30 @@ const generationIterator = generations();
 const circle = document.querySelector('.timer circle');
 
 function runGeneration() {
-  const { value, done } = generationIterator.next();
+  const { value: things, done } = generationIterator.next();
+  const boxes = document.querySelectorAll(".box");
+  // console.log(boxes);
+  const slots = document.querySelectorAll(".boxSlot");
+  const text = document.querySelectorAll('.boxText');
+  const fitnessDisplay = document.querySelector('#fitnessDisplay');
+  const fittest = things[1];
+  // console.log(fittest);
+  let usedSlots = 0;
   if (!done) {
-    const [individual, fitness] = value;
-
-    // Add fitness to chart
-    chart.data.datasets.at(0).data.push(fitness);
+    chart.data.datasets.at(0).data.push(things[0]);
     chart.update();
+    for(let i = 0; i < fittest.length; i++){
+      if(fittest[i] == 1){
+        boxes[i].x.baseVal.value = slots[usedSlots].x.baseVal.value;
+        boxes[i].y.baseVal.value = slots[usedSlots].y.baseVal.value;
+        boxes[i].style = `left: ${slots[usedSlots].x}, top: ${slots[usedSlots].y}`;
+        boxes[i].classList.remove('hidden');
+        usedSlots += 1;
+      } else {
+        boxes[i].classList.add('hidden');
+      }
+    }
+    fitnessDisplay.textContent = '£' + things[2] + '000 ' + things[3] + ' tonnes';
   } else {
     circle.classList.add("finished");
   }

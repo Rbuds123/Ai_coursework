@@ -6,9 +6,9 @@ const DATA = {
 
 export const PARAMETERS = {
   populationSize: 100,
-  generations: 25,
+  generations: 100,
   crossoverRate: 0.8,
-  mutationRate: 0.02,
+  mutationRate: 0.007,
   genomeSize: DATA.weights.length,
 }
 
@@ -64,18 +64,27 @@ export function* generations() {
   for (let generation = 0; generation < PARAMETERS.generations; generation++) {
     // Sort population, least fit first.
     population.sort((a, b) => a[1] - b[1]);
-
-    // Pull out the fittest member.
-    yield structuredClone(population.at(-1));
+    const maxFitness = population[99];
+    const maxFitnessObject = maxFitness[0];
+    let mass = 0;
+    for(let i = 0; i < DATA.weights.length; i++){
+      if(maxFitnessObject.genome[i] == 1){
+        mass += DATA.weights[i];
+      }
+    }
+    console.log(mass);
 
     // Normalise fitnesses
     const totalFitness = population.reduce((p, [_, f]) => p + f, 0);
-    let previousProbability = 0;
-    for (let i = 0; i < PARAMETERS.populationSize; i++) {
-      previousProbability += population[i][1] / totalFitness;
-      population[i][1] = previousProbability;
-    }
 
+    // Produce the mean fitness
+    yield [totalFitness / PARAMETERS.populationSize, maxFitnessObject.genome, maxFitness[1], mass];
+
+    let cumulativeProbability = 0;
+    for (let i = 0; i < PARAMETERS.populationSize; i++) {
+      cumulativeProbability += population[i][1] / totalFitness;
+      population[i][1] = cumulativeProbability;
+    }
     // Generate next population
     const nextPopulation = [];
     while (nextPopulation.length < PARAMETERS.populationSize) {
@@ -85,6 +94,8 @@ export function* generations() {
       // Find the two individuals who are just above the arrow
       const [parentA] = population.find(([_, f]) => f > selectorA);
       const [parentB] = population.find(([_, f]) => f > selectorB);
+      console.log(parentA);
+      console.log(parentB);
 
       // Breed the two individuals
       const [childA, childB] = parentA.breed(parentB);
