@@ -182,14 +182,15 @@ data['clarity'] = data['clarity'].map(clarity_mapping)
 # Remove rows with missing values
 data = data.dropna()
 
-# Convert to numpy arrays
+# Convert to numpy arrays to ensure compatibility with the neural network class
 X = data[features].values
 y = data[target].values.reshape(-1, 1)
 
 # Normalize features
-X_min = X.min(axis=0)
-X_max = X.max(axis=0)
+X_min = X.min(axis=0) # Minimum values for normalization
+X_max = X.max(axis=0) # Maximum values for normalization
 X_max[X_max == X_min] += 1e-8
+# we normalize the x to ensure all features are on the same scale
 X_norm = (X - X_min) / (X_max - X_min)
 
 # Normalize target using log transformation
@@ -203,9 +204,9 @@ split_index = int(0.8 * len(indices))
 train_indices = indices[:split_index]
 test_indices = indices[split_index:]
 
-X_train = X_norm[train_indices]
+X_train = X_norm[train_indices] #training data based on shuffled indices
 X_test = X_norm[test_indices]
-y_train = y_log[train_indices]
+y_train = y_log[train_indices] #training target values 
 y_test = y_log[test_indices]
 
 # Create and train the neural network
@@ -215,7 +216,8 @@ history = nn.train(X_train, y_train, epochs=100, learning_rate=0.001, batch_size
 # Predict on test data
 y_pred = nn.predict(X_test)
 
-# Denormalize predictions and actual values
+# Denormalizing is done to bring the predictions and actual values (y_test) back to their original scale
+# so they can be interpreted in the context of the original data.
 y_test_denorm = denormalize(y_test, 0, 1)
 y_pred_denorm = denormalize(y_pred, 0, 1)
 
@@ -224,6 +226,7 @@ plt.figure(figsize=(12, 6))
 
 plt.subplot(1, 2, 1)
 plt.scatter(y_test_denorm, y_pred_denorm, alpha=0.5, color="blue")
+#this line represents a comparasion between the actual and predicted values
 plt.plot([min(y_test_denorm), max(y_test_denorm)], [min(y_test_denorm), max(y_test_denorm)], color="red", linestyle="--")
 plt.xlabel("Actual Price")
 plt.ylabel("Predicted Price")
@@ -232,10 +235,13 @@ plt.grid(True)
 sample_indices = np.random.choice(y_test_denorm.shape[0], 5, replace=False)
 samples = [(y_test_denorm[i][0], y_pred_denorm[i][0], y_test_denorm[i][0] - y_pred_denorm[i][0]) for i in sample_indices]
 
-print("Random Samples: Actual, Predicted, Difference")
-for actual, predicted, difference in samples:
-    print(f"Actual: {actual:.2f}, Predicted: {predicted:.2f}, Difference: {difference:.2f}")
-    
+# Print random samples in a table format with additional columns for number and error percentage
+print(f"{'No.':<5}{'Actual':<15}{'Predicted':<15}{'Difference':<15}{'Error (%)':<15}")
+print("-" * 65)
+for i, (actual, predicted, difference) in enumerate(samples, start=1):
+    error_percentage = (abs(difference) / actual) * 100
+    print(f"{i:<5}{actual:<15.2f}{predicted:<15.2f}{difference:<15.2f}{error_percentage:<15.2f}")
+# display the training loss history    
 plt.subplot(1, 2, 2)
 plt.plot(history)
 plt.xlabel("Epoch")
