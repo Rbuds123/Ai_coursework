@@ -163,8 +163,8 @@ def denormalize(data, min_val, max_val):
     """
     return np.expm1(data)
 
-# Load and preprocess the dataset
-data = pd.read_csv('data.csv')
+# Load the dataset
+data = pd.read_csv('M33174_CWK_Data_set.csv')
 
 # Select features and target
 features = ['carat', 'cut', 'color', 'clarity', 'depth', 'table', 'x', 'y', 'z']
