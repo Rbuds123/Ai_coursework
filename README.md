@@ -21,7 +21,7 @@ or
 cd Task2
 python3 -m http.server
 ```
-Navigate to `http://localhost:8080/`
+Navigate to `http://localhost:8080/` and press 'Run Task 2'
 
 ![Truck I drew](truck.png "Truck I drew")
 
@@ -29,7 +29,6 @@ Navigate to `http://localhost:8080/`
 ```sh
 python3 task_3.py
 ```
-the following task 3 shows a neural network aproximating a given function and also shows the mean squared average of the neural network
 
 ## 4: Diamond Prices
 ```sh

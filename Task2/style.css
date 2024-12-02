@@ -1,0 +1,68 @@
+/* Page */
+main {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+figure {
+  width: 30em;
+  height: 20em;
+}
+
+/* Timer */
+.timer {
+  width: 3em;
+  vertical-align: middle;
+
+  circle {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1em;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    animation: 0.25s infinite linear reverse fillCircle;
+    animation-play-state: paused;
+  }
+
+  circle.finished {
+    animation: none;
+    stroke: greenyellow;
+  }
+}
+
+svg:has(~ input[type=checkbox]:checked) circle {
+  animation-play-state: running;
+}
+
+@keyframes fillCircle {
+  5% {
+    stroke-dasharray: 0 283;
+  }
+
+  100% {
+    stroke-dasharray: 283 283;
+  }
+}
+
+/* Truck */
+.truckRect {
+  stroke: black;
+  fill: white;
+  stroke-width: 2px;
+}
+
+.wheel {
+  fill: grey;
+  stroke: black;
+  stroke-width: 2px;
+}
+
+.boxSlot {
+  stroke: black;
+  stroke-dasharray: 6, 6;
+  fill: white;
+}
+
+.hidden {
+  display: none;
+}
