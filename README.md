@@ -23,8 +23,6 @@ python3 -m http.server
 ```
 Navigate to `http://localhost:8080/` and press 'Run Task 2'
 
-![Truck I drew](truck.png "Truck I drew")
-
 ## 3: Function Approximation
 ```sh
 python3 task_3.py
