@@ -126,6 +126,7 @@ class GAApp:
         self.print_chromosome()
 
     def draw_grid(self, chromosome):
+        #chromosome is passed to the function to draw the grid as each bit represents a square in the grid
         self.canvas.delete("all")
         for i in range(4):
             for j in range(8):

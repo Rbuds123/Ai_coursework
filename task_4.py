@@ -28,8 +28,8 @@ class NeuralNetwork:
 
     def relu(self, x):
         """
-        Apply the ReLU activation function.
-
+        Apply the ReLU activation function. 
+        relu is used instead of sigmoid because it is computationally less expensive and has been shown to perform better in deep neural networks.
         Args:
             x (numpy.ndarray): Input array.
 
@@ -227,15 +227,17 @@ plt.figure(figsize=(12, 6))
 plt.subplot(1, 2, 1)
 plt.scatter(y_test_denorm, y_pred_denorm, alpha=0.5, color="blue")
 #this line represents a comparasion between the actual and predicted values
-plt.plot([min(y_test_denorm), max(y_test_denorm)], [min(y_test_denorm), max(y_test_denorm)], color="red", linestyle="--")
+plt.plot([min(y_test_denorm), max(y_test_denorm)], [min(y_test_denorm), max(y_test_denorm)], color="red", linestyle="--", label="Ideal Fit")
+plt.legend(["Data Points", "Ideal Fit"])
 plt.xlabel("Actual Price")
 plt.ylabel("Predicted Price")
 plt.title("Actual vs Predicted Prices")
 plt.grid(True)
+#5 random samples are selected to display the actual, predicted, and difference values but the whole dataset is being used to train the model
 sample_indices = np.random.choice(y_test_denorm.shape[0], 5, replace=False)
 samples = [(y_test_denorm[i][0], y_pred_denorm[i][0], y_test_denorm[i][0] - y_pred_denorm[i][0]) for i in sample_indices]
 
-# Print random samples in a table format with additional columns for number and error percentage
+# Print 5 random samples in a table format with additional columns for number and error percentage
 print(f"{'No.':<5}{'Actual':<15}{'Predicted':<15}{'Difference':<15}{'Error (%)':<15}")
 print("-" * 65)
 for i, (actual, predicted, difference) in enumerate(samples, start=1):
@@ -243,10 +245,11 @@ for i, (actual, predicted, difference) in enumerate(samples, start=1):
     print(f"{i:<5}{actual:<15.2f}{predicted:<15.2f}{difference:<15.2f}{error_percentage:<15.2f}")
 # display the training loss history    
 plt.subplot(1, 2, 2)
-plt.plot(history)
+plt.plot(history, color="blue", label="Mean Squared Error")
 plt.xlabel("Epoch")
 plt.ylabel("Mean Squared Error")
 plt.title("Training Loss History")
+plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
