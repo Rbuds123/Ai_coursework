@@ -167,7 +167,7 @@ def denormalize(data, min_val, max_val):
 data = pd.read_csv('data.csv')
 
 # Select features and target
-features = ['carat', 'cut', 'colour', 'clarity', 'depth', 'table', 'x', 'y', 'z']
+features = ['carat', 'cut', 'color', 'clarity', 'depth', 'table', 'x', 'y', 'z']
 target = 'price'
 
 # Encode categorical variables
@@ -176,7 +176,7 @@ color_mapping = {'J': 1, 'I': 2, 'H': 3, 'G': 4, 'F': 5, 'E': 6, 'D': 7}
 clarity_mapping = {'I1': 1, 'SI2': 2, 'SI1': 3, 'VS2': 4, 'VS1': 5, 'VVS2': 6, 'VVS1': 7, 'IF': 8}
 
 data['cut'] = data['cut'].map(cut_mapping)
-data['colour'] = data['colour'].map(color_mapping)
+data['color'] = data['color'].map(color_mapping)
 data['clarity'] = data['clarity'].map(clarity_mapping)
 
 # Remove rows with missing values

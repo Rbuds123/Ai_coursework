@@ -84,7 +84,6 @@ def new_generation(population, mutation_rate):
     Returns:
         list: A new population generated through selection, crossover, and mutation.
     """
-    
     new_pop = []
     fitnesses = [fitness(chromo) for chromo in population]
     for _ in range(len(population) // 2):

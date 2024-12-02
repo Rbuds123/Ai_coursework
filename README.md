@@ -21,7 +21,7 @@ or
 cd Task2
 python3 -m http.server
 ```
-Navigate to `http://localhost:8080/` and press 'Run Task 2'
+Navigate to `http://localhost:8080/` or `http://localhost:8000/` and press 'Run Task 2'
 
 ## 3: Function Approximation
 ```sh
