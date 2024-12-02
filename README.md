@@ -32,3 +32,7 @@ python3 task_3.py
 ```sh
 python3 task_4.py
 ```
+data is passed in via the line so 'M33174_CWK_Data_set.csv' is needed to run the program 
+```
+data = pd.read_csv('M33174_CWK_Data_set.csv')
+```
